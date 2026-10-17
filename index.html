@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kiran's Career Intelligence Portal · v10.2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+:root {
+  --bg: #050508;
+  --surface: #0a0a10;
+  --surface-card: rgba(14, 14, 22, 0.75);
+  --surface-card-hover: rgba(20, 20, 32, 0.88);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.04);
+  --border-glow: rgba(255, 106, 0, 0.4);
+  --accent: #ff6a00;
+  --accent-dim: #d45100;
+  --accent-bright: #ff8e38;
+  --accent2: #ffa654;
+  --accent-glow: rgba(255, 106, 0, 0.35);
+  --emerald: #00f090;
+  --emerald-dim: rgba(0, 240, 144, 0.12);
+  --emerald-border: rgba(0, 240, 144, 0.3);
+  --violet: #a855f7;
+  --violet-bright: #c084fc;
+  --violet-dim: rgba(168, 85, 247, 0.12);
+  --violet-border: rgba(168, 85, 247, 0.35);
+  --amber: #fbbf24;
+  --danger: #ff4d4d;
+  --txt: #f8fafc;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+  --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--txt);
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient Orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.38;
+  will-change: transform;
+}
+.orb-1 { width: 550px; height: 550px; background: radial-gradient(circle, rgba(255,106,0,0.18), transparent 70%); top: -140px; left: -140px; animation: float1 24s ease-in-out infinite; }
+.orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168,85,247,0.14), transparent 70%); bottom: -120px; right: -120px; animation: float2 28s ease-in-out infinite; }
+.orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,240,144,0.08), transparent 70%); top: 40%; left: 45%; animation: float3 32s ease-in-out infinite; }
+
+@keyframes float1 { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(60px,80px,0); } }
+@keyframes float2 { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-70px,-60px,0); } }
+@keyframes float3 { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-40px,40px,0) scale(1.2); } }
+
+/* Grid Texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 20px 100px;
+}
+
+/* Glassmorphism */
+.glass {
+  background: var(--surface-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* ── HEADER / HERO ── */
+.hero {
+  border-radius: var(--r-xl);
+  padding: 38px 42px 34px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(20, 22, 38, 0.85) 0%, rgba(10, 11, 18, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--violet), transparent);
+}
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 106, 0, 0.12);
+  border: 1px solid rgba(255, 106, 0, 0.3);
+  border-radius: 50px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+.brand-badge-dot {
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.6; } }
+
+.system-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 240, 144, 0.08);
+  border: 1px solid rgba(0, 240, 144, 0.25);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 11.5px;
+  color: var(--emerald);
+  font-weight: 600;
+}
+.system-status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--emerald);
+  box-shadow: 0 0 8px var(--emerald);
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 4.6vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.9px;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #fff 40%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: 14.5px;
+  color: var(--muted2);
+  font-weight: 400;
+  margin-bottom: 22px;
+  max-width: 680px;
+  line-height: 1.55;
+}
+
+.hero-profile-deck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  color: var(--txt);
+  backdrop-filter: blur(10px);
+}
+.profile-pill b { color: var(--accent2); font-weight: 600; }
+
+/* ── STATS CARDS ── */
+.stats-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  border-radius: var(--r);
+  padding: 20px 18px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s var(--ease), border-color 0.3s ease;
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+}
+.stat-card.stat-total::before { background: linear-gradient(90deg, transparent, #94a3b8, transparent); }
+.stat-card.stat-perfect::before { background: linear-gradient(90deg, transparent, var(--emerald), transparent); }
+.stat-card.stat-strong::before { background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+.stat-card.stat-today::before { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+.stat-card.stat-applied::before { background: linear-gradient(90deg, transparent, var(--violet), transparent); }
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted2);
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+}
+
+/* ── CONTROLS & FILTER BAR ── */
+.controls-dock {
+  border-radius: var(--r-lg);
+  padding: 22px 26px;
+  margin-bottom: 28px;
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  background: rgba(12, 12, 18, 0.88);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.deck-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+.deck-tab {
+  padding: 9px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--muted2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  outline: none;
+}
+.deck-tab:hover {
+  background: rgba(255, 106, 0, 0.08);
+  border-color: rgba(255, 106, 0, 0.35);
+  color: var(--accent2);
+  transform: translateY(-2px);
+}
+.deck-tab.active {
+  background: linear-gradient(145deg, var(--accent), var(--accent-dim));
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 18px rgba(255, 106, 0, 0.35);
+}
+.deck-tab.tab-violet:hover, .deck-tab.tab-violet.active {
+  background: linear-gradient(145deg, var(--violet), var(--violet-bright));
+  border-color: var(--violet);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4);
+}
+
+.search-filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.search-box-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+.search-box-wrap input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--txt);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.search-box-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.15);
+}
+.search-box-icon {
+  position: absolute;
+  left: 15px; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.action-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--muted2);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.action-refresh-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 106, 0, 0.08);
+}
+
+/* ── JOB CARD (DECK) ── */
+.job-card {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: transform 0.3s var(--ease), border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  animation: cardIn 0.45s var(--ease) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.9);
+}
+
+.job-card.tier-perfect { border-color: rgba(0, 240, 144, 0.35); }
+.job-card.tier-strong { border-color: rgba(255, 106, 0, 0.35); }
+.job-card.tier-good { border-color: rgba(251, 191, 36, 0.25); }
+
+/* Rotating gradient highlight on Perfect Matches */
+.job-card.tier-perfect::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--r-lg);
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0deg,
+    var(--emerald) 60deg,
+    transparent 120deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  animation: rotateGrad 4s linear infinite;
+}
+@keyframes rotateGrad { to { --angle: 360deg; } }
+
+.card-header-bar {
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-light);
+}
+.tier-perfect .card-header-bar { background: rgba(0, 240, 144, 0.06); color: var(--emerald); }
+.tier-strong .card-header-bar { background: rgba(255, 106, 0, 0.06); color: var(--accent2); }
+.tier-good .card-header-bar { background: rgba(251, 191, 36, 0.06); color: var(--amber); }
+
+.card-inner-body { padding: 24px 28px 26px; }
+
+.card-top-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.company-avatar {
+  width: 50px; height: 50px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent2);
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.job-title-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  line-height: 1.25;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.company-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.company-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted2);
+}
+.target-co-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: rgba(255, 106, 0, 0.12);
+  border: 1px solid rgba(255, 106, 0, 0.35);
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.job-meta-deck {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  font-size: 13.5px;
+  color: var(--muted2);
+}
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.meta-chip b { color: var(--txt); }
+
+.why-match-panel {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-sm);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.55;
+  position: relative;
+}
+.why-match-panel b { color: var(--accent2); }
+
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-action {
+  padding: 10px 18px;
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.25s var(--ease);
+  border: none;
+}
+.btn-apply-direct {
+  background: linear-gradient(145deg, var(--accent), var(--accent-dim));
+  color: #000;
+  box-shadow: 0 4px 16px rgba(255, 106, 0, 0.35);
+}
+.btn-apply-direct:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 106, 0, 0.5);
+}
+.btn-mark-applied {
+  background: var(--emerald-dim);
+  border: 1px solid var(--emerald-border);
+  color: var(--emerald);
+}
+.btn-mark-applied:hover {
+  background: var(--emerald);
+  color: #000;
+  transform: translateY(-2px);
+}
+.btn-ai-gen {
+  background: var(--violet-dim);
+  border: 1px solid var(--violet-border);
+  color: var(--violet-bright);
+}
+.btn-ai-gen:hover {
+  background: var(--violet);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+}
+.btn-bookmark {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  color: var(--amber);
+}
+.btn-bookmark:hover { background: rgba(251, 191, 36, 0.2); transform: translateY(-2px); }
+.btn-hide {
+  background: rgba(255, 77, 77, 0.06);
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  color: var(--danger);
+  margin-left: auto;
+}
+.btn-hide:hover { background: rgba(255, 77, 77, 0.18); }
+
+/* ── GEMINI AI MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(16px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-window {
+  background: #0d0d14;
+  border: 1px solid var(--violet-border);
+  border-radius: var(--r-xl);
+  max-width: 660px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 34px;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.9), 0 0 60px rgba(168, 85, 247, 0.2);
+  position: relative;
+  animation: modalPop 0.35s var(--ease) both;
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.92) translate3d(0, 20px, 0); }
+  to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+}
+.modal-close-btn {
+  position: absolute;
+  top: 24px; right: 24px;
+  width: 34px; height: 34px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted2);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s;
+}
+.modal-close-btn:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+
+.modal-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--violet-bright);
+  margin-bottom: 8px;
+}
+.modal-job-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-pitch-box {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 16px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #e2e8f0;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+.toast-alert {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translate3d(-50%, 90px, 0);
+  background: #000;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  border-radius: 50px;
+  padding: 12px 26px;
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 100000;
+  opacity: 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 106, 0, 0.2);
+  transition: all 0.35s var(--ease);
+  pointer-events: none;
+}
+.toast-alert.show {
+  transform: translate3d(-50%, 0, 0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 26px 20px; }
+  .card-inner-body { padding: 20px 18px; }
+  .btn-hide { margin-left: 0; }
+  .hero-profile-deck { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="page">
+  <!-- HERO BANNER -->
+  <div class="hero glass">
+    <div class="hero-top-row">
+      <div class="brand-badge">
+        <div class="brand-badge-dot"></div>
+        Kiran Kumar S · Career Intelligence v10.2
+      </div>
+      <div class="system-status-pill">
+        <div class="system-status-dot"></div>
+        Live Sheet Engine Connected
+      </div>
+    </div>
+    <h1 class="hero-title">Product Development Engineering Radar</h1>
+    <div class="hero-sub">Daily Bangalore hardware, validation &amp; NPI intelligence for Consumer Electronics. Pre-scored against your 2.7y Crossbeats track record.</div>
+    <div class="hero-profile-deck">
+      <span class="profile-pill">🏢 <b>CROSSBEATS (2.7y)</b></span>
+      <span class="profile-pill">🎧 <b>TWS, Watches, Projectors, Dash Cams</b></span>
+      <span class="profile-pill">⚡ <b>NPI, ODM China, 19 SKUs, -40% Returns</b></span>
+      <span class="profile-pill">💰 <b>5–18 LPA Target</b></span>
+      <span class="profile-pill">📍 <b>Bangalore Only</b></span>
+    </div>
+  </div>
+
+  <!-- STATS DECK -->
+  <div class="stats-deck">
+    <div class="stat-card glass stat-total">
+      <div class="stat-num" id="statTotal" style="color:#fff">-</div>
+      <div class="stat-label">Total Matches</div>
+    </div>
+    <div class="stat-card glass stat-perfect">
+      <div class="stat-num" id="statPerfect" style="color:var(--emerald)">-</div>
+      <div class="stat-label">🏆 Perfect (9–10)</div>
+    </div>
+    <div class="stat-card glass stat-strong">
+      <div class="stat-num" id="statStrong" style="color:var(--accent2)">-</div>
+      <div class="stat-label">✅ Strong (7–8)</div>
+    </div>
+    <div class="stat-card glass stat-today">
+      <div class="stat-num" id="statToday" style="color:var(--amber)">-</div>
+      <div class="stat-label">🟢 Posted Today</div>
+    </div>
+    <div class="stat-card glass stat-applied">
+      <div class="stat-num" id="statApplied" style="color:var(--violet-bright)">-</div>
+      <div class="stat-label">💼 Applied Pipeline</div>
+    </div>
+  </div>
+
+  <!-- CONTROLS & DECK FILTERS -->
+  <div class="controls-dock glass">
+    <div class="deck-tabs">
+      <button class="deck-tab active" data-tab="all" onclick="selectDeck('all')">🎯 All Matches</button>
+      <button class="deck-tab" data-tab="perfect" onclick="selectDeck('perfect')">🏆 Perfect (9–10)</button>
+      <button class="deck-tab" data-tab="strong" onclick="selectDeck('strong')">✅ Strong (7–8)</button>
+      <button class="deck-tab" data-tab="today" onclick="selectDeck('today')">🟢 Posted Today</button>
+      <button class="deck-tab" data-tab="applied" onclick="selectDeck('applied')">💼 Applied Pipeline</button>
+      <button class="deck-tab" data-tab="saved" onclick="selectDeck('saved')">⭐ Bookmarks</button>
+      <button class="deck-tab tab-violet" data-tab="targets" onclick="selectDeck('targets')">🏢 Target Companies Hub</button>
+      <button class="deck-tab tab-violet" data-tab="analytics" onclick="selectDeck('analytics')">📊 Keyword Radar</button>
+    </div>
+
+    <div class="search-filter-row">
+      <div class="search-box-wrap">
+        <span class="search-box-icon">🔍</span>
+        <input type="text" id="globalSearchInput" placeholder="Search by job title, company (e.g. boAt, Noise, Dixon), or keywords…" oninput="renderCurrentDeck()">
+      </div>
+      <button class="action-refresh-btn" onclick="syncAllSheetData(true)">
+        🔄 Sync Sheet
+      </button>
+    </div>
+  </div>
+
+  <!-- FEED CONTAINER -->
+  <div id="deckFeed"></div>
+</div>
+
+<!-- GEMINI AI PITCH & INTERVIEW MODAL -->
+<div class="modal-overlay" id="aiPitchModal" onclick="closeModalBackdrop(event)">
+  <div class="modal-window">
+    <button class="modal-close-btn" onclick="closeAiModal()">✕</button>
+    <div class="modal-ai-badge">✦ Gemini AI Career Copilot</div>
+    <h2 class="modal-job-headline" id="modalJobTitle"></h2>
+
+    <div id="modalSpinner" style="text-align:center;padding:34px 0;color:var(--muted2)">
+      <div style="font-size:24px;margin-bottom:10px">🤖</div>
+      <div>Synthesizing customized InMail &amp; interview strategies based on your 2.7y Crossbeats NPI background…</div>
+    </div>
+
+    <div id="modalBody" style="display:none">
+      <div style="margin-bottom:20px">
+        <div class="modal-section-title">📩 3-Sentence LinkedIn DM / InMail (Ready to Send)</div>
+        <div class="modal-pitch-box" id="modalPitchText"></div>
+        <button class="btn-action btn-apply-direct" onclick="copyToClipboard('modalPitchText')">📋 Copy InMail</button>
+      </div>
+
+      <div>
+        <div class="modal-section-title">🎯 Tailored Resume Bullets &amp; Technical Interview Prep</div>
+        <div class="modal-pitch-box" id="modalTipsText"></div>
+        <button class="btn-action btn-ai-gen" onclick="copyToClipboard('modalTipsText')">📋 Copy Prep Notes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-alert" id="toastAlert">Copied to clipboard!</div>
+
+<script>
+'use strict';
+
+/* ── CONFIGURATION LINKED TO YOUR SHEET ── */
+const SHEET_ID = '1-szWU6ypnUgVQ148hm1NdwpjC8IMhUI5BTUwpnd-iFg';
+const GEMINI_API_KEY = 'AIzaSyCZ_noDsOgKHMWthjxrpwzX4P24azTt_ng';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxizW8S3WnbeApEvyzx-r-MNyEhE7Hazh7nJFJdSdnGBE78UXto94oYl1EycmsJjnKAybA/exec';
+
+let jobsDataset = [];
+let targetCompaniesDataset = [];
+let keywordPerformanceDataset = [];
+let activeDeck = 'all';
+
+let appliedJobsMap = new Set(JSON.parse(localStorage.getItem('kiran_applied_v10') || '[]'));
+let savedJobsMap = new Set(JSON.parse(localStorage.getItem('kiran_saved_v10') || '[]'));
+let hiddenJobsMap = new Set(JSON.parse(localStorage.getItem('kiran_hidden_v10') || '[]'));
+
+function showToast(msg) {
+  const t = document.getElementById('toastAlert');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ── GOOGLE VISUALIZATION JSONP LOADER (0ms CORS FREE) ── */
+function fetchGvizSheet(sheetName) {
+  return new Promise((resolve) => {
+    const handler = 'cb_' + Math.random().toString(36).substring(2);
+    const tag = document.createElement('script');
+    window[handler] = (res) => {
+      delete window[handler];
+      tag.remove();
+      resolve(res.table ? res.table.rows : []);
+    };
+    tag.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=responseHandler:${handler}`;
+    document.body.appendChild(tag);
+  });
+}
+
+async function syncAllSheetData(forceToast = false) {
+  if (forceToast) showToast('Syncing with Google Sheet…');
+  try {
+    const [jobsRows, targetRows, kwRows] = await Promise.all([
+      fetchGvizSheet('Job_Applications'),
+      fetchGvizSheet('Target_Companies'),
+      fetchGvizSheet('Keyword_Performance')
+    ]);
+
+    jobsDataset = jobsRows.map(r => {
+      const c = r.c || [];
+      return {
+        date: c[0] ? (c[0].f || c[0].v) : '',
+        title: c[1] ? String(c[1].v).trim() : '',
+        company: c[2] ? String(c[2].v).trim() : '',
+        location: c[3] ? String(c[3].v).trim() : 'Bangalore',
+        salary: c[4] ? String(c[4].v).trim() : 'Not specified',
+        score: c[5] ? parseInt(c[5].v) || 6 : 6,
+        status: c[6] ? String(c[6].v).trim() : 'New',
+        why: c[9] ? String(c[9].v).trim() : '',
+        url: c[10] ? String(c[10].v).trim() : '#',
+        source: c[11] ? String(c[11].v).trim() : 'Aggregator',
+        keyword: c[12] ? String(c[12].v).trim() : '',
+        daysOld: c[13] ? parseInt(c[13].v) || 0 : 0,
+        key: c[14] ? String(c[14].v).trim() : ''
+      };
+    }).filter(j => j.title && j.title !== 'Job Title');
+
+    targetCompaniesDataset = targetRows.map(r => {
+      const c = r.c || [];
+      return {
+        name: c[0] ? String(c[0].v).trim().toLowerCase() : '',
+        rawName: c[0] ? String(c[0].v).trim() : '',
+        url: c[1] ? String(c[1].v).trim() : '#',
+        priority: c[2] ? String(c[2].v).trim() : 'High',
+        why: c[3] ? String(c[3].v).trim() : ''
+      };
+    }).filter(t => t.name && t.name !== 'company');
+
+    keywordPerformanceDataset = kwRows.map(r => {
+      const c = r.c || [];
+      return {
+        keyword: c[0] ? String(c[0].v).trim() : '',
+        hits: c[1] ? parseInt(c[1].v) || 0 : 0,
+        date: c[2] ? String(c[2].f || c[2].v) : ''
+      };
+    }).filter(k => k.keyword && k.keyword !== 'Keyword');
+
+    refreshStats();
+    renderCurrentDeck();
+    if (forceToast) showToast('Live Sheet data synchronized!');
+  } catch (err) {
+    console.error(err);
+    if (forceToast) showToast('Sync error — verify sheet permissions');
+  }
+}
+
+function refreshStats() {
+  document.getElementById('statTotal').textContent = jobsDataset.length;
+  document.getElementById('statPerfect').textContent = jobsDataset.filter(j => j.score >= 9).length;
+  document.getElementById('statStrong').textContent = jobsDataset.filter(j => j.score >= 7 && j.score < 9).length;
+  document.getElementById('statToday').textContent = jobsDataset.filter(j => j.daysOld === 0).length;
+  document.getElementById('statApplied').textContent = appliedJobsMap.size;
+}
+
+function selectDeck(deckName) {
+  activeDeck = deckName;
+  document.querySelectorAll('.deck-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === deckName));
+  renderCurrentDeck();
+}
+
+function getCompanyMonogram(name) {
+  const cleanName = (name || '').replace(/[^a-zA-Z0-9\s]/g, '').trim();
+  const parts = cleanName.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  if (parts[0]) return parts[0].substring(0, 2).toUpperCase();
+  return 'CO';
+}
+
+function renderCurrentDeck() {
+  const container = document.getElementById('deckFeed');
+  const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+
+  if (activeDeck === 'targets') {
+    renderTargetCompaniesDeck();
+    return;
+  }
+  if (activeDeck === 'analytics') {
+    renderKeywordRadarDeck();
+    return;
+  }
+
+  let filtered = jobsDataset.filter(j => !hiddenJobsMap.has(j.key));
+
+  if (activeDeck === 'perfect') filtered = filtered.filter(j => j.score >= 9);
+  else if (activeDeck === 'strong') filtered = filtered.filter(j => j.score >= 7 && j.score < 9);
+  else if (activeDeck === 'today') filtered = filtered.filter(j => j.daysOld === 0);
+  else if (activeDeck === 'applied') filtered = filtered.filter(j => appliedJobsMap.has(j.key));
+  else if (activeDeck === 'saved') filtered = filtered.filter(j => savedJobsMap.has(j.key));
+
+  if (q) {
+    filtered = filtered.filter(j =>
+      j.title.toLowerCase().includes(q) ||
+      j.company.toLowerCase().includes(q) ||
+      j.why.toLowerCase().includes(q) ||
+      j.location.toLowerCase().includes(q)
+    );
+  }
+
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:54px 20px;color:var(--muted2);border:1px dashed var(--border);border-radius:var(--r-lg)">
+        <div style="font-size:36px;margin-bottom:12px">🔍</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px">No jobs match this deck filter</div>
+        <div style="font-size:13.5px">Try switching tabs or adjusting your search keywords.</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map((j, i) => {
+    const isTarget = targetCompaniesDataset.some(t => t.name && j.company.toLowerCase().includes(t.name));
+    const isApplied = appliedJobsMap.has(j.key);
+    const isSaved = savedJobsMap.has(j.key);
+
+    const tierClass = j.score >= 9 ? 'tier-perfect' : (j.score >= 7 ? 'tier-strong' : 'tier-good');
+    const tierBadge = j.score >= 9 ? '🏆 PERFECT MATCH' : (j.score >= 7 ? '✅ STRONG MATCH' : '👀 GOOD MATCH');
+    const monogram = getCompanyMonogram(j.company);
+
+    let freshText = j.daysOld === 0 ? 'Today!' : (j.daysOld === 1 ? 'Yesterday' : `${j.daysOld}d ago`);
+
+    return `
+      <div class="job-card glass ${tierClass}">
+        <div class="card-header-bar">
+          <span>#${i + 1} · Source: ${esc(j.source)} · 📅 ${freshText}</span>
+          <span>${tierBadge} (${j.score}/10)</span>
+        </div>
+        <div class="card-inner-body">
+          <div class="card-top-info">
+            <div class="company-avatar">${monogram}</div>
+            <div style="flex:1">
+              <h3 class="job-title-text">${esc(j.title)}</h3>
+              <div class="company-name-row">
+                <span class="company-name">${esc(j.company)}</span>
+                ${isTarget ? '<span class="target-co-badge">⭐ Tier 1 Target Co</span>' : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="job-meta-deck">
+            <span class="meta-chip">📍 <b>${esc(j.location)}</b></span>
+            <span class="meta-chip">💰 <b>${esc(j.salary)}</b></span>
+            <span class="meta-chip">🔍 via <i>${esc(j.keyword || 'Hardware')}</i></span>
+          </div>
+
+          <div class="why-match-panel">
+            <b>💡 Why You Match:</b> ${esc(j.why || 'Matches Kiran\'s NPI validation and hardware track record.')}
+          </div>
+
+          <div class="card-actions-row">
+            <a href="${esc(j.url)}" target="_blank" rel="noopener" class="btn-action btn-apply-direct">
+              🔗 View &amp; Apply
+            </a>
+            <button class="btn-action btn-mark-applied" onclick="markJobApplied('${esc(j.key)}', '${encodeURIComponent(j.title)}', '${encodeURIComponent(j.company)}')">
+              ${isApplied ? '✓ Applied' : '✅ Mark Applied'}
+            </button>
+            <button class="btn-action btn-bookmark" onclick="toggleJobSave('${esc(j.key)}')">
+              ${isSaved ? '★ Saved' : '☆ Save'}
+            </button>
+            <button class="btn-action btn-ai-gen" onclick="generateAiPitch('${encodeURIComponent(j.title)}', '${encodeURIComponent(j.company)}', '${encodeURIComponent(j.why)}')">
+              ⚡ AI Quick Pitch
+            </button>
+            <button class="btn-action btn-hide" onclick="hideJobCard('${esc(j.key)}')">
+              🚫 Hide
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTargetCompaniesDeck() {
+  const container = document.getElementById('deckFeed');
+  container.innerHTML = `
+    <div class="glass" style="border-radius:var(--r-lg);padding:30px;animation:cardIn .45s var(--ease) both;">
+      <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">🏢 Target Consumer Electronics Companies</h3>
+      <div style="font-size:13.5px;color:var(--muted2);margin-bottom:22px">Direct career hub access for boAt, Noise, Dixon, Samsung, Mivi, and allied hardware giants.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:14px;">
+        ${targetCompaniesDataset.map(t => `
+          <div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;justify-content:between;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff">${esc(t.rawName)}</span>
+                <span class="target-co-badge">${esc(t.priority)}</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--muted2);margin-bottom:14px;line-height:1.4">${esc(t.why || 'Consumer Electronics & Hardware NPI')}</div>
+            </div>
+            <a href="${esc(t.url)}" target="_blank" rel="noopener" class="btn-action btn-apply-direct" style="font-size:12px;padding:8px 14px;justify-content:center">
+              Careers Portal 🔗
+            </a>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderKeywordRadarDeck() {
+  const container = document.getElementById('deckFeed');
+  const sortedKw = [...keywordPerformanceDataset].sort((a,b) => b.hits - a.hits);
+
+  container.innerHTML = `
+    <div class="glass" style="border-radius:var(--r-lg);padding:30px;animation:cardIn .45s var(--ease) both;">
+      <h3 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">📊 Keyword Search Radar</h3>
+      <div style="font-size:13.5px;color:var(--muted2);margin-bottom:22px">Tracks which product development and NPI keywords produce the highest match volume in Bangalore.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${sortedKw.slice(0, 20).map(k => {
+          const maxHits = sortedKw[0] ? sortedKw[0].hits : 1;
+          const pct = Math.max(10, Math.round((k.hits / maxHits) * 100));
+          return `
+            <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border-light);border-radius:var(--r-sm);padding:12px 16px;">
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px">
+                <span style="font-weight:600;color:#fff">${esc(k.keyword)}</span>
+                <span style="font-weight:700;color:var(--accent2)">${k.hits} Hits</span>
+              </div>
+              <div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:50px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--violet));border-radius:50px"></div>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+/* ── PERSISTENCE & APPS SCRIPT BACKGROUND PING ── */
+function markJobApplied(key, encTitle, encComp) {
+  appliedJobsMap.add(key);
+  localStorage.setItem('kiran_applied_v10', JSON.stringify([...appliedJobsMap]));
+  refreshStats();
+  renderCurrentDeck();
+  showToast('✓ Application Recorded to Pipeline!');
+
+  if (WEB_APP_URL) {
+    const url = `${WEB_APP_URL}?action=Applied&key=${encodeURIComponent(key)}&title=${encTitle}&company=${encComp}`;
+    fetch(url, { mode: 'no-cors' }).catch(() => {});
+  }
+}
+
+function toggleJobSave(key) {
+  if (savedJobsMap.has(key)) savedJobsMap.delete(key);
+  else savedJobsMap.add(key);
+  localStorage.setItem('kiran_saved_v10', JSON.stringify([...savedJobsMap]));
+  renderCurrentDeck();
+  showToast(savedJobsMap.has(key) ? '⭐ Saved to Bookmarks!' : 'Removed from Bookmarks');
+}
+
+function hideJobCard(key) {
+  hiddenJobsMap.add(key);
+  localStorage.setItem('kiran_hidden_v10', JSON.stringify([...hiddenJobsMap]));
+  renderCurrentDeck();
+  showToast('Job card dismissed.');
+}
+
+/* ── GEMINI AI INMAIL & INTERVIEW COPILOT ── */
+async function generateAiPitch(encTitle, encComp, encWhy) {
+  const title = decodeURIComponent(encTitle);
+  const company = decodeURIComponent(encComp);
+  const why = decodeURIComponent(encWhy);
+
+  const modal = document.getElementById('aiPitchModal');
+  const modalTitle = document.getElementById('modalJobTitle');
+  const spinner = document.getElementById('modalSpinner');
+  const body = document.getElementById('modalBody');
+
+  modalTitle.textContent = `${title} @ ${company}`;
+  modal.classList.add('show');
+  spinner.style.display = 'block';
+  body.style.display = 'none';
+
+  const prompt = `You are acting as Kiran Kumar S, an accomplished Product Development Engineer with 2.7 years experience at CROSSBEATS (consumer electronics: TWS earbuds, smartwatches, projectors, dash cams, Bluetooth speakers).
+Key Achievements: Led NPI, product validation, China ODM vendor management, successfully commercialized 19 SKUs, and drove 40% reduction in customer return rates through rigorous hardware testing.
+
+Job Opportunity:
+Title: ${title}
+Company: ${company}
+Match context: ${why}
+
+Generate two high-impact sections:
+1. Under "PITCH:", write a sharp, polished 3-sentence LinkedIn DM / InMail to the hiring manager demonstrating immediate business and hardware NPI value.
+2. Under "TIPS:", provide 2 customized resume bullet points highlighting relevant Crossbeats NPI impact, followed by the top 2 technical interview questions and strategic answer outlines for this role.`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    const data = await res.json();
+    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    const pitchMatch = raw.match(/PITCH:([\s\S]*?)(?=TIPS:|$)/i);
+    const tipsMatch = raw.match(/TIPS:([\s\S]*)/i);
+
+    document.getElementById('modalPitchText').textContent = pitchMatch ? pitchMatch[1].trim() : raw;
+    document.getElementById('modalTipsText').textContent = tipsMatch ? tipsMatch[1].trim() : 'Review NPI stage gates (EVT, DVT, PVT), China ODM audit methods, and audio acoustic validation.';
+
+    spinner.style.display = 'none';
+    body.style.display = 'block';
+  } catch (err) {
+    spinner.innerHTML = `<div style="color:var(--danger)">Gemini AI unavailable. Check network or API quota.</div>`;
+  }
+}
+
+function closeAiModal() {
+  document.getElementById('aiPitchModal').classList.remove('show');
+}
+function closeModalBackdrop(e) {
+  if (e.target.id === 'aiPitchModal') closeAiModal();
+}
+function copyToClipboard(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent);
+  showToast('Copied to clipboard!');
+}
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+window.addEventListener('DOMContentLoaded', () => syncAllSheetData());
+</script>
+</body>
+</html>
